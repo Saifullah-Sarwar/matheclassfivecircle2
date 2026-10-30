@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বৃত্ত - প্রাথমিক গণিত (তৃতীয়-চতুর্থ শ্রেণী)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Bengali Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            user-select: none;
+            transition: zoom 0.2s ease;
+        }
+        .tab-btn.active {
+            background-color: #2563eb;
+            color: white;
+            border-color: #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+    </style>
+</head>
+<body id="app-body" class="bg-slate-100 text-slate-800 min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-4 px-6 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-wide">প্রাথমিক গণিত: বৃত্ত (ওয়াইড স্ক্রীন)</h1>
+                <p class="text-blue-100 text-xs sm:text-sm mt-0.5">সহজ ইন্টারঅ্যাক্টিভ শিক্ষা, পূর্ণাঙ্গ ড্রয়িং টুলস ও অনুশীলন</p>
+            </div>
+            <button onclick="speakText('প্রাথমিক গণিত, বৃত্ত অধ্যায়ে তোমাকে স্বাগতম!')" class="bg-white/20 hover:bg-white/30 p-2.5 rounded-full text-white transition active:scale-95">
+                <i class="fa-solid fa-volume-high text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Global App Zoom Control Bar -->
+    <div class="max-w-7xl mx-auto px-4 mt-3">
+        <div class="bg-indigo-900 text-white px-4 py-2 rounded-xl flex flex-wrap items-center justify-between shadow-sm gap-2 text-xs sm:text-sm">
+            <div class="flex items-center gap-2 font-bold">
+                <i class="fa-solid fa-expand text-amber-400"></i>
+                <span>সম্পূর্ণ অ্যাপ স্ক্রিন জুম কন্ট্রোল:</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="changeAppZoom(-0.1)" class="bg-indigo-700 hover:bg-indigo-600 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition active:scale-95" title="Zoom Out">
+                    <i class="fa-solid fa-magnifying-glass-minus text-amber-300"></i> ছোট করুন (-)
+                </button>
+                <span id="app-zoom-display" class="font-mono font-bold w-12 text-center text-amber-300">100%</span>
+                <button onclick="changeAppZoom(0.1)" class="bg-indigo-700 hover:bg-indigo-600 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition active:scale-95" title="Zoom In">
+                    <i class="fa-solid fa-magnifying-glass-plus text-amber-300"></i> বড় করুন (+)
+                </button>
+                <button onclick="resetAppZoom()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg font-bold transition active:scale-95" title="Reset">
+                    <i class="fa-solid fa-arrows-rotate"></i> রিসেট
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs (Page Wise) -->
+    <nav class="max-w-7xl mx-auto px-4 mt-4">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200">
+            <button onclick="switchTab('p159')" id="tab-p159" class="tab-btn active border p-3 rounded-xl text-center font-bold text-sm sm:text-base transition flex flex-col items-center gap-1">
+                <span class="text-xs font-normal text-slate-500">পৃষ্ঠা ১৫৯</span>
+                <span><i class="fa-solid fa-shapes"></i> বৃত্ত আঁকি</span>
+            </button>
+            <button onclick="switchTab('p160')" id="tab-p160" class="tab-btn border p-3 rounded-xl text-center font-bold text-sm sm:text-base transition flex flex-col items-center gap-1">
+                <span class="text-xs font-normal text-slate-500">পৃষ্ঠা ১৬০</span>
+                <span><i class="fa-solid fa-circle-dot"></i> বৃত্তের অংশ</span>
+            </button>
+            <button onclick="switchTab('p161')" id="tab-p161" class="tab-btn border p-3 rounded-xl text-center font-bold text-sm sm:text-base transition flex flex-col items-center gap-1">
+                <span class="text-xs font-normal text-slate-500">পৃষ্ঠা ১৬১</span>
+                <span><i class="fa-solid fa-compass"></i> কম্পাস ও প্রশ্ন</span>
+            </button>
+            <button onclick="switchTab('p162')" id="tab-p162" class="tab-btn border p-3 rounded-xl text-center font-bold text-sm sm:text-base transition flex flex-col items-center gap-1">
+                <span class="text-xs font-normal text-slate-500">পৃষ্ঠা ১৬২</span>
+                <span><i class="fa-solid fa-palette"></i> নকশা ও ড্রয়িং টুলস</span>
+            </button>
+            <button onclick="switchTab('puzzle')" id="tab-puzzle" class="tab-btn border border-emerald-400 bg-emerald-50 text-emerald-800 p-3 rounded-xl text-center font-bold text-sm sm:text-base transition flex flex-col items-center gap-1 hover:bg-emerald-100 col-span-2 sm:col-span-1">
+                <span class="text-xs font-semibold text-emerald-600">মজাদার খেলা</span>
+                <span><i class="fa-solid fa-puzzle-piece text-emerald-600"></i> বৃত্ত জোড়া লাগাও</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Box -->
+    <main class="max-w-7xl mx-auto px-4 mt-6">
+
+        <!-- PAGE 159 -->
+        <section id="page-p159" class="space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center border-b pb-3 mb-4">
+                    <h2 class="text-xl sm:text-2xl font-bold text-blue-700">পৃষ্ঠা ১৫৯: গোল আকৃতি ও বৃত্ত আঁকা</h2>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-bold">কাজ ১ ও ২</span>
+                </div>
+
+                <!-- Intro Card -->
+                <p class="text-base sm:text-lg mb-4 text-slate-700">
+                    নিচের বস্তুগুলোর নাম কী? এগুলোকে আমরা <strong>গোল আকৃতি</strong> বা <strong>বৃত্ত</strong> বলি।
+                </p>
+
+                <!-- Touch Items -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                    <button onclick="speakText('ফুটবল - এটি একটি গোল আকৃতি')" class="p-4 bg-blue-50 border border-blue-200 rounded-xl text-center hover:bg-blue-100 transition active:scale-95">
+                        <div class="text-4xl mb-1">⚽</div>
+                        <div class="font-bold text-blue-900">ফুটবল</div>
+                        <div class="text-xs text-blue-600 mt-1"><i class="fa-solid fa-volume-high"></i> চাপুন</div>
+                    </button>
+                    <button onclick="speakText('দেয়াল ঘড়ি - এটি গোল আকৃতির')" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center hover:bg-emerald-100 transition active:scale-95">
+                        <div class="text-4xl mb-1">⏰</div>
+                        <div class="font-bold text-emerald-900">দেয়াল ঘড়ি</div>
+                        <div class="text-xs text-emerald-600 mt-1"><i class="fa-solid fa-volume-high"></i> চাপুন</div>
+                    </button>
+                    <button onclick="speakText('চুড়ি বা বোতলের মুখ দিয়ে বৃত্ত আঁকা যায়')" class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-center hover:bg-amber-100 transition active:scale-95">
+                        <div class="text-4xl mb-1">⭕</div>
+                        <div class="font-bold text-amber-900">চুড়ি ও ছিপি</div>
+                        <div class="text-xs text-amber-600 mt-1"><i class="fa-solid fa-volume-high"></i> চাপুন</div>
+                    </button>
+                    <button onclick="speakText('পয়সা বা মুদ্রা')" class="p-4 bg-purple-50 border border-purple-200 rounded-xl text-center hover:bg-purple-100 transition active:scale-95">
+                        <div class="text-4xl mb-1">🪙</div>
+                        <div class="font-bold text-purple-900">মুদ্রা</div>
+                        <div class="text-xs text-purple-600 mt-1"><i class="fa-solid fa-volume-high"></i> চাপুন</div>
+                    </button>
+                </div>
+
+                <!-- Hands-on Activity 2 Demo -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                    <h3 class="font-bold text-indigo-900 text-lg mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-thumbtack text-rose-500"></i> পিন ও পেন্সিল দিয়ে বৃত্ত আঁকা (সিমুলেটর)
+                    </h3>
+                    <p class="text-sm text-slate-600 mb-4">একটি পিন বসিয়ে পেন্সিল ঘুরিয়ে বক্ররেখা বা বৃত্ত আঁকা শেখা:</p>
+                    
+                    <div class="flex flex-col items-center justify-center">
+                        <canvas id="pinCanvas" width="400" height="280" class="bg-white rounded-xl border border-slate-300 shadow-inner max-w-full"></canvas>
+                        <button onclick="animatePinDrawing()" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition active:scale-95 flex items-center gap-2">
+                            <i class="fa-solid fa-play"></i> ঘুরিয়ে আঁকো
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 160 -->
+        <section id="page-p160" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center border-b pb-3 mb-4">
+                    <h2 class="text-xl sm:text-2xl font-bold text-blue-700">পৃষ্ঠা ১৬০: বৃত্তের উপাদান ও বিস্তারিত বর্ণনা</h2>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-bold">কাজ ৩</span>
+                </div>
+
+                <p class="text-sm text-slate-600 mb-4">নিচের অংশগুলোতে স্পর্শ/ট্যাপ করে প্রতিটি উপাদানের চিত্র ও বিস্তৃত সংজ্ঞা দেখে নাও:</p>
+
+                <!-- Dynamic Diagram & Detailed Description -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                    <!-- Left Column: Interactive Diagram -->
+                    <div class="md:col-span-5 flex flex-col items-center justify-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <canvas id="partsCanvas" width="320" height="320" class="max-w-full"></canvas>
+                        <p id="part-title" class="mt-3 font-bold text-lg text-blue-900 text-center">অংশ নির্বাচন করতে ডানপাশে ট্যাপ করুন</p>
+                    </div>
+
+                    <!-- Right Column: Interactive Buttons & Full Detailed Descriptions -->
+                    <div class="md:col-span-7 space-y-3">
+                        <!-- Center -->
+                        <button onclick="highlightPart('center')" class="w-full text-left p-3.5 rounded-xl border border-blue-200 bg-blue-50/50 hover:bg-blue-100 transition">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-blue-900 text-base">১. কেন্দ্র (Center)</span>
+                                <i class="fa-solid fa-volume-high text-blue-600" onclick="event.stopPropagation(); speakText('কেন্দ্র হলো বৃত্তের ভেতরের মাঝখানের নির্দিষ্ট বিন্দু। বৃত্তের পরিধির প্রতিটি বিন্দু কেন্দ্র থেকে সমান দূরে থাকে।');"></i>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <strong>বর্ণনা:</strong> বৃত্তের ভেতরের ঠিক মাঝখানের নির্দিষ্ট বিন্দুকে <strong>কেন্দ্র</strong> বলে। বৃত্তের চারপাশের সকল বিন্দু কেন্দ্র থেকে সমান দূরে অবস্থিত।
+                            </p>
+                        </button>
+
+                        <!-- Radius -->
+                        <button onclick="highlightPart('radius')" class="w-full text-left p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100 transition">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-emerald-900 text-base">২. ব্যাসার্ধ (Radius)</span>
+                                <i class="fa-solid fa-volume-high text-emerald-600" onclick="event.stopPropagation(); speakText('কেন্দ্র থেকে পরিধি পর্যন্ত দূরত্বকে ব্যাসার্ধ বলে। ব্যাসার্ধ হলো ব্যাসের অর্ধেক।');"></i>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <strong>বর্ণনা:</strong> বৃত্তের কেন্দ্র থেকে পরিধির যেকোনো বিন্দু পর্যন্ত টানা রেখাংশকে <strong>ব্যাসার্ধ</strong> বলে। ব্যাসার্ধ হলো ব্যাসের ঠিক অর্ধেক।
+                            </p>
+                        </button>
+
+                        <!-- Diameter -->
+                        <button onclick="highlightPart('diameter')" class="w-full text-left p-3.5 rounded-xl border border-purple-200 bg-purple-50/50 hover:bg-purple-100 transition">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-purple-900 text-base">৩. ব্যাস (Diameter)</span>
+                                <i class="fa-solid fa-volume-high text-purple-600" onclick="event.stopPropagation(); speakText('কেন্দ্রগামী জ্যাকে ব্যাস বলে। ব্যাস হলো বৃত্তের বৃহত্তম জ্যা।');"></i>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <strong>বর্ণনা:</strong> যে জ্যা বৃত্তের কেন্দ্রের ওপর দিয়ে যায় তাকে <strong>ব্যাস</strong> বলে। ব্যাস বৃত্তকে দুটি সমান ভাগে ভাগ করে এবং এটিই বৃত্তের বৃহত্তম জ্যা।
+                            </p>
+                        </button>
+
+                        <!-- Chord -->
+                        <button onclick="highlightPart('chord')" class="w-full text-left p-3.5 rounded-xl border border-amber-200 bg-amber-50/50 hover:bg-amber-100 transition">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-amber-900 text-base">৪. জ্যা (Chord)</span>
+                                <i class="fa-solid fa-volume-high text-amber-600" onclick="event.stopPropagation(); speakText('পরিধির যে কোনো দুটি বিন্দুর সংযোজক রেখাংশকে জ্যা বলে।');"></i>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <strong>বর্ণনা:</strong> বৃত্তের পরিধির ওপর যেকোনো দুটি বিন্দুর সংযোজক সরলরেখাকে <strong>জ্যা</strong> বলে। 
+                            </p>
+                        </button>
+
+                        <!-- Circumference -->
+                        <button onclick="highlightPart('circumference')" class="w-full text-left p-3.5 rounded-xl border border-rose-200 bg-rose-50/50 hover:bg-rose-100 transition">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="font-bold text-rose-900 text-base">৫. পরিধি (Circumference)</span>
+                                <i class="fa-solid fa-volume-high text-rose-600" onclick="event.stopPropagation(); speakText('বৃত্তের সম্পূর্ণ গোল সীমানা বা বক্ররেখাকে পরিধি বলে।');"></i>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                <strong>বর্ণনা:</strong> বৃত্ত তৈরি করে এমন আবদ্ধ গোল বক্ররেখা বা সম্পূর্ণ বাইরের সীমানাকে <strong>পরিধি</strong> বলে।
+                            </p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 161 -->
+        <section id="page-p161" class="hidden space-y-6">
+            <!-- Compass Simulator -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center border-b pb-3 mb-4">
+                    <h2 class="text-xl sm:text-2xl font-bold text-blue-700">পৃষ্ঠা ১৬১: কম্পাস দিয়ে বৃত্ত আঁকা</h2>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-bold">কাজ ৪ ও ৫</span>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-blue-50/60 p-4 rounded-xl border border-blue-100 mb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold text-blue-900">ব্যাসার্ধ:</span>
+                        <button onclick="setCompassRadius(2)" class="px-3 py-1 bg-white border border-blue-300 rounded-lg text-sm font-bold hover:bg-blue-600 hover:text-white transition">২ সেমি</button>
+                        <button onclick="setCompassRadius(3)" class="px-3 py-1 bg-white border border-blue-300 rounded-lg text-sm font-bold hover:bg-blue-600 hover:text-white transition">৩ সেমি</button>
+                        <button onclick="setCompassRadius(4)" class="px-3 py-1 bg-white border border-blue-300 rounded-lg text-sm font-bold hover:bg-blue-600 hover:text-white transition">৪ সেমি</button>
+                    </div>
+                    <button onclick="startCompassAnimation()" class="bg-blue-600 text-white font-bold px-4 py-2 rounded-xl hover:bg-blue-700 shadow-sm transition active:scale-95 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-nib"></i> আঁকা শুরু করো
+                    </button>
+                </div>
+
+                <div class="flex justify-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <canvas id="compassCanvas" width="400" height="300" class="max-w-full"></canvas>
+                </div>
+            </div>
+
+            <!-- Page 161 Exercise Questions -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-xl font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-question text-blue-600"></i> খালি ঘর পূরণের প্রশ্নের উত্তর (ট্যাপ করুন)
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Q1 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between items-start gap-3">
+                        <div>
+                            <span class="font-bold text-slate-800">১. কেন্দ্র থেকে পরিধি পর্যন্ত দূরত্ব হলো —</span>
+                            <div id="ans-box-1" class="hidden mt-2 font-bold text-emerald-600 text-lg">👉 উত্তর: ব্যাসার্ধ</div>
+                        </div>
+                        <div class="flex items-center gap-2 w-full justify-between mt-2 pt-2 border-t">
+                            <button onclick="speakText('কেন্দ্র থেকে পরিধি পর্যন্ত দূরত্ব হলো ব্যাসার্ধ')" class="p-2 text-slate-600 hover:text-blue-600"><i class="fa-solid fa-volume-high text-lg"></i></button>
+                            <button onclick="toggleAnswer('ans-box-1')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-xs px-3 py-2 rounded-lg font-bold transition">উত্তর দেখুন / লুকান</button>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between items-start gap-3">
+                        <div>
+                            <span class="font-bold text-slate-800">২. পরিধির একটি অংশ হলো —</span>
+                            <div id="ans-box-2" class="hidden mt-2 font-bold text-emerald-600 text-lg">👉 উত্তর: চাপ (বা বৃত্তচাপ)</div>
+                        </div>
+                        <div class="flex items-center gap-2 w-full justify-between mt-2 pt-2 border-t">
+                            <button onclick="speakText('পরিধির একটি অংশ হলো চাপ')" class="p-2 text-slate-600 hover:text-blue-600"><i class="fa-solid fa-volume-high text-lg"></i></button>
+                            <button onclick="toggleAnswer('ans-box-2')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-xs px-3 py-2 rounded-lg font-bold transition">উত্তর দেখুন / লুকান</button>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between items-start gap-3">
+                        <div>
+                            <span class="font-bold text-slate-800">৩. কেন্দ্র দিয়ে যাওয়া জ্যা হলো বৃত্তের —</span>
+                            <div id="ans-box-3" class="hidden mt-2 font-bold text-emerald-600 text-lg">👉 উত্তর: ব্যাস</div>
+                        </div>
+                        <div class="flex items-center gap-2 w-full justify-between mt-2 pt-2 border-t">
+                            <button onclick="speakText('কেন্দ্র দিয়ে যাওয়া জ্যা হলো বৃত্তের ব্যাস')" class="p-2 text-slate-600 hover:text-blue-600"><i class="fa-solid fa-volume-high text-lg"></i></button>
+                            <button onclick="toggleAnswer('ans-box-3')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-xs px-3 py-2 rounded-lg font-bold transition">উত্তর দেখুন / লুকান</button>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between items-start gap-3">
+                        <div>
+                            <span class="font-bold text-slate-800">৪. ব্যাস যদি ১২ সেমি হয়, তবে ব্যাসার্ধ কত?</span>
+                            <div id="ans-box-4" class="hidden mt-2 font-bold text-emerald-600 text-lg">👉 উত্তর: ৬ সেমি (১২ ÷ ২ = ৬)</div>
+                        </div>
+                        <div class="flex items-center gap-2 w-full justify-between mt-2 pt-2 border-t">
+                            <button onclick="speakText('ব্যাস ১২ সেমি হলে ব্যাসার্ধ হবে ৬ সেমি')" class="p-2 text-slate-600 hover:text-blue-600"><i class="fa-solid fa-volume-high text-lg"></i></button>
+                            <button onclick="toggleAnswer('ans-box-4')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-xs px-3 py-2 rounded-lg font-bold transition">উত্তর দেখুন / লুকান</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 162 (WIDE DRAWING STUDIO WITH COMPLETE TOOLS) -->
+        <section id="page-p162" class="hidden space-y-6">
+            <!-- CD Problem Interactive -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center border-b pb-3 mb-4">
+                    <h2 class="text-xl sm:text-2xl font-bold text-blue-700">পৃষ্ঠা ১৬২: সিডি (CD) সংক্রান্ত ধাঁধা</h2>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-bold">কাজ ১</span>
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 mb-4">
+                    <p class="font-bold text-amber-900">
+                        প্রশ্ন: ৩৬ সেমি দৈর্ঘ্যবিশিষ্ট একটি বাক্সে ৩টি সমান সিডি (CD) পাশাপাশি রাখা আছে। প্রতিটি সিডির ব্যাসার্ধ কত?
+                    </p>
+                </div>
+
+                <div class="text-center my-2">
+                    <button onclick="toggleAnswer('cd-ans')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2.5 rounded-xl transition shadow active:scale-95">
+                        <i class="fa-solid fa-lightbulb"></i> সমাধানের ধাপসমূহ দেখুন
+                    </button>
+                </div>
+
+                <div id="cd-ans" class="hidden bg-slate-50 p-5 rounded-2xl border border-slate-300 space-y-3 text-slate-800 mt-4">
+                    <div class="p-2.5 bg-white rounded-lg border">১. ৩টি সিডির মোট ব্যাস = <strong>৩৬ সেমি</strong></div>
+                    <div class="p-2.5 bg-white rounded-lg border">২. ১টি সিডির ব্যাস = ৩৬ ÷ ৩ = <strong>১২ সেমি</strong></div>
+                    <div class="p-2.5 bg-white rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-900 font-bold">
+                        ৩. ১টি সিডির ব্যাসার্ধ = ১২ ÷ ২ = <strong>৬ সেমি</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full-featured Drawing Studio with Zoom & Complete Tools -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center border-b pb-4 mb-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-blue-700">পৃষ্ঠা ১৬২: ইন্টারেক্টিভ ড্রয়িং ও নকশা স্টুডিও</h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">সব ধরনের টুলস, জুম ইন/আউট এবং কালার পিকার ব্যবহার করে হাত দিয়ে আঁকুন</p>
+                    </div>
+                    <span class="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full font-bold">ডিজিটাল আর্ট বোর্ডের সুবিধা</span>
+                </div>
+
+                <!-- Control Toolbar -->
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-800 text-white p-3.5 rounded-2xl mb-4">
+                    
+                    <!-- Drawing Tools Selection -->
+                    <div class="flex items-center gap-1.5 bg-slate-700/80 p-1 rounded-xl">
+                        <button onclick="setTool('pencil')" id="tool-pencil" class="px-3 py-1.5 rounded-lg text-sm font-bold bg-blue-600 text-white flex items-center gap-1 transition">
+                            <i class="fa-solid fa-pencil"></i> পেন্সিল
+                        </button>
+                        <button onclick="setTool('line')" id="tool-line" class="px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-slate-600 flex items-center gap-1 transition text-slate-300">
+                            <i class="fa-solid fa-grip-lines"></i> সোজা রেখা
+                        </button>
+                        <button onclick="setTool('circle')" id="tool-circle" class="px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-slate-600 flex items-center gap-1 transition text-slate-300">
+                            <i class="fa-solid fa-compass"></i> কম্পাস বৃত্ত
+                        </button>
+                        <button onclick="setTool('eraser')" id="tool-eraser" class="px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-slate-600 flex items-center gap-1 transition text-slate-300">
+                            <i class="fa-solid fa-eraser"></i> রবার
+                        </button>
+                    </div>
+
+                    <!-- Diameter / Radius Selection Panel for Compass -->
+                    <div id="compass-size-panel" class="flex flex-wrap items-center gap-2 bg-indigo-900/90 border border-indigo-500/50 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-100">
+                        <i class="fa-solid fa-ruler-combined text-amber-400 text-sm"></i>
+                        <span>ব্যাস (d):</span>
+                        <div class="flex items-center bg-slate-900 rounded-lg border border-slate-600 px-1">
+                            <button onclick="adjustDiameter(-1)" class="px-1.5 py-0.5 hover:text-sky-400 font-bold text-sm">-</button>
+                            <input type="number" id="diameter-input" min="2" max="30" value="8" onchange="onDiameterInputChange(this.value)" class="w-10 text-center bg-transparent text-white font-mono font-bold focus:outline-none">
+                            <span class="text-[10px] text-slate-400 mr-1">সেমি</span>
+                            <button onclick="adjustDiameter(1)" class="px-1.5 py-0.5 hover:text-sky-400 font-bold text-sm">+</button>
+                        </div>
+                        <span class="text-slate-400 font-normal">|(ব্যাসার্ধ = <span id="radius-calc-display" class="text-amber-300 font-bold">4</span> সেমি)</span>
+                        
+                        <!-- Speed Control Input -->
+                        <div class="flex items-center gap-1.5 ml-2 pl-2 border-l border-indigo-700">
+                            <i class="fa-solid fa-gauge-high text-sky-400"></i>
+                            <span class="text-slate-300">গতি:</span>
+                            <select id="anim-speed-select" class="bg-slate-800 text-amber-300 border border-indigo-500/60 rounded px-1.5 py-0.5 text-xs font-bold focus:outline-none cursor-pointer">
+                                <option value="0.03">ধীর (Slow)</option>
+                                <option value="0.08" selected>সাধারণ (Normal)</option>
+                                <option value="0.18">দ্রুত (Fast)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Measurement Toggle Option -->
+                    <div class="flex items-center gap-2 bg-slate-700/80 px-3 py-1.5 rounded-xl">
+                        <input type="checkbox" id="show-measurements-check" checked class="w-4 h-4 text-blue-600 rounded cursor-pointer accent-blue-600">
+                        <label for="show-measurements-check" class="text-xs font-bold text-slate-200 cursor-pointer">পরিমাপ দেখাও (ব্যাসার্ধ/ব্যাস/পরিধি)</label>
+                    </div>
+
+                    <!-- Preset Pattern Buttons -->
+                    <div class="flex items-center gap-2">
+                        <button onclick="generatePattern('flower')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">🌸 ফুল</button>
+                        <button onclick="generatePattern('concentric')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">🎯 কেন্দ্র</button>
+                        <button onclick="generatePattern('rangoli')" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">✨ নকশা</button>
+                    </div>
+
+                    <!-- Zoom Controls -->
+                    <div class="flex items-center gap-2 bg-slate-700/80 p-1 rounded-xl">
+                        <span class="text-xs text-slate-300 font-bold px-1">জুম:</span>
+                        <button onclick="changeZoom(-0.1)" class="w-8 h-8 rounded-lg bg-slate-600 hover:bg-slate-500 font-bold flex items-center justify-center text-lg active:scale-95" title="Zoom Out">
+                            <i class="fa-solid fa-magnifying-glass-minus"></i>
+                        </button>
+                        <span id="zoom-level-display" class="text-xs font-mono font-bold w-12 text-center text-sky-400">100%</span>
+                        <button onclick="changeZoom(0.1)" class="w-8 h-8 rounded-lg bg-slate-600 hover:bg-slate-500 font-bold flex items-center justify-center text-lg active:scale-95" title="Zoom In">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </button>
+                        <button onclick="resetZoom()" class="px-2 py-1 rounded-lg bg-slate-600 hover:bg-slate-500 text-xs font-bold" title="Reset Zoom">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sub Toolbar: Color Picker & Stroke Size -->
+                <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-100 p-3 rounded-xl border border-slate-200 mb-4 text-slate-700 text-sm">
+                    
+                    <!-- Colors -->
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold">রঙ নির্বাচন:</span>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="setColor('#38bdf8')" class="w-7 h-7 rounded-full bg-sky-400 border-2 border-white shadow-sm hover:scale-110 transition"></button>
+                            <button onclick="setColor('#f43f5e')" class="w-7 h-7 rounded-full bg-rose-500 border-2 border-white shadow-sm hover:scale-110 transition"></button>
+                            <button onclick="setColor('#a855f7')" class="w-7 h-7 rounded-full bg-purple-500 border-2 border-white shadow-sm hover:scale-110 transition"></button>
+                            <button onclick="setColor('#10b981')" class="w-7 h-7 rounded-full bg-emerald-500 border-2 border-white shadow-sm hover:scale-110 transition"></button>
+                            <button onclick="setColor('#f59e0b')" class="w-7 h-7 rounded-full bg-amber-500 border-2 border-white shadow-sm hover:scale-110 transition"></button>
+                            <button onclick="setColor('#ffffff')" class="w-7 h-7 rounded-full bg-white border border-slate-300 shadow-sm hover:scale-110 transition"></button>
+                            <input type="color" id="customColorPicker" onchange="setColor(this.value)" class="w-8 h-8 rounded cursor-pointer border-none bg-transparent">
+                        </div>
+                    </div>
+
+                    <!-- Size Slider -->
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold">পেন্সিলের সাইজ:</span>
+                        <input type="range" id="brushSizeSlider" min="1" max="30" value="3" oninput="updateBrushSize(this.value)" class="w-32 accent-blue-600 cursor-pointer">
+                        <span id="brush-size-val" class="font-mono text-xs bg-white px-2 py-1 rounded border font-bold">3px</span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center gap-2">
+                        <button onclick="undoDraw()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-3 py-1.5 rounded-lg text-xs transition flex items-center gap-1">
+                            <i class="fa-solid fa-rotate-left"></i> পূর্বাবস্থায়
+                        </button>
+                        <button onclick="clearDesignCanvas()" class="bg-rose-100 hover:bg-rose-200 text-rose-800 font-bold px-3 py-1.5 rounded-lg text-xs transition flex items-center gap-1">
+                            <i class="fa-solid fa-trash-can"></i> পরিষ্কার
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Canvas Workspace (Zoomable Container) -->
+                <div class="overflow-hidden bg-slate-900 rounded-2xl border-2 border-slate-700 flex justify-center items-center min-h-[420px] p-4 relative">
+                    <div id="zoomable-container" class="transition-transform duration-100 origin-center">
+                        <canvas id="designCanvas" width="700" height="420" class="bg-slate-900 cursor-crosshair touch-none shadow-2xl rounded-xl"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PUZZLE & DRAG-DROP SECTION -->
+        <section id="page-puzzle" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center border-b pb-3 mb-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-emerald-700">মজাদার খেলা: অংশ টেনে বৃত্ত তৈরি করো!</h2>
+                        <p class="text-xs sm:text-sm text-slate-500">পাশের অংশগুলো মাউস/আঙুল দিয়ে টেনে মাঝখানের বোর্ডে নিয়ে আসো।</p>
+                    </div>
+                    <button onclick="resetPuzzleBoard()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-rotate"></i> নতুন খেলা
+                    </button>
+                </div>
+
+                <!-- Puzzle Workspace -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center min-h-[460px]">
+                    
+                    <!-- Left Items Palette -->
+                    <div class="md:col-span-3 flex md:flex-col gap-3 justify-center">
+                        <div draggable="true" ondragstart="handlePuzzleDragStart(event, 'center')" onclick="speakAndHighlightPart('center')" class="bg-blue-50 border-2 border-blue-400 p-3.5 rounded-2xl cursor-grab active:cursor-grabbing hover:bg-blue-100 transition shadow-sm flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">১</span>
+                            <div>
+                                <h4 class="font-bold text-blue-900 text-sm">কেন্দ্র বিন্দু (Center)</h4>
+                                <p class="text-[11px] text-blue-600">টেনে বোর্ডে বসাও</p>
+                            </div>
+                        </div>
+
+                        <div draggable="true" ondragstart="handlePuzzleDragStart(event, 'circumference')" onclick="speakAndHighlightPart('circumference')" class="bg-rose-50 border-2 border-rose-400 p-3.5 rounded-2xl cursor-grab active:cursor-grabbing hover:bg-rose-100 transition shadow-sm flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-rose-600 text-white font-bold flex items-center justify-center text-xs">২</span>
+                            <div>
+                                <h4 class="font-bold text-rose-900 text-sm">পরিধি (Circumference)</h4>
+                                <p class="text-[11px] text-rose-600">টেনে বোর্ডে বসাও</p>
+                            </div>
+                        </div>
+
+                        <div draggable="true" ondragstart="handlePuzzleDragStart(event, 'radius')" onclick="speakAndHighlightPart('radius')" class="bg-emerald-50 border-2 border-emerald-400 p-3.5 rounded-2xl cursor-grab active:cursor-grabbing hover:bg-emerald-100 transition shadow-sm flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">৩</span>
+                            <div>
+                                <h4 class="font-bold text-emerald-900 text-sm">ব্যাসার্ধ (Radius)</h4>
+                                <p class="text-[11px] text-emerald-600">টেনে বোর্ডে বসাও</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Center Puzzle Board Area -->
+                    <div class="md:col-span-6 flex flex-col items-center justify-center bg-slate-900 p-4 rounded-3xl border-4 border-dashed border-emerald-500/40 relative min-h-[380px] shadow-2xl" ondragover="event.preventDefault()" ondrop="handlePuzzleDrop(event)">
+                        
+                        <canvas id="puzzleCanvas" width="360" height="360" class="rounded-2xl"></canvas>
+                        
+                        <div id="puzzle-status-text" class="absolute bottom-3 bg-slate-800/90 text-amber-300 border border-amber-500/50 px-4 py-1.5 rounded-full text-xs font-bold shadow-lg">
+                            অংশগুলো টেনে এনে একটি সম্পূর্ণ বৃত্ত তৈরি করো!
+                        </div>
+                    </div>
+
+                    <!-- Right Items Palette -->
+                    <div class="md:col-span-3 flex md:flex-col gap-3 justify-center">
+                        <div draggable="true" ondragstart="handlePuzzleDragStart(event, 'diameter')" onclick="speakAndHighlightPart('diameter')" class="bg-amber-50 border-2 border-amber-400 p-3.5 rounded-2xl cursor-grab active:cursor-grabbing hover:bg-amber-100 transition shadow-sm flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-xs">৪</span>
+                            <div>
+                                <h4 class="font-bold text-amber-900 text-sm">ব্যাস (Diameter)</h4>
+                                <p class="text-[11px] text-amber-600">টেনে বোর্ডে বসাও</p>
+                            </div>
+                        </div>
+
+                        <div draggable="true" ondragstart="handlePuzzleDragStart(event, 'chord')" onclick="speakAndHighlightPart('chord')" class="bg-teal-50 border-2 border-teal-400 p-3.5 rounded-2xl cursor-grab active:cursor-grabbing hover:bg-teal-100 transition shadow-sm flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-teal-600 text-white font-bold flex items-center justify-center text-xs">৫</span>
+                            <div>
+                                <h4 class="font-bold text-teal-900 text-sm">জ্যা (Chord)</h4>
+                                <p class="text-[11px] text-teal-600">টেনে বোর্ডে বসাও</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Script Block -->
+    <script>
+        // Global App Zoom State & Functions
+        let appZoomLevel = 1.0;
+
+        function changeAppZoom(delta) {
+            appZoomLevel = Math.max(0.7, Math.min(1.5, appZoomLevel + delta));
+            updateAppZoom();
+        }
+
+        function resetAppZoom() {
+            appZoomLevel = 1.0;
+            updateAppZoom();
+        }
+
+        function updateAppZoom() {
+            const bodyEl = document.getElementById('app-body');
+            if (bodyEl) {
+                bodyEl.style.zoom = appZoomLevel;
+                document.getElementById('app-zoom-display').textContent = `${Math.round(appZoomLevel * 100)}%`;
+            }
+        }
+
+        // Speech Synthesis Function
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'bn-BD'; 
+                utterance.rate = 0.9; 
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('আপনার ব্রাউজারে স্পিচ ফিচার সমর্থিত নয়।');
+            }
+        }
+
+        // Tab Switch Function
+        function switchTab(tabId) {
+            const pages = ['p159', 'p160', 'p161', 'p162', 'puzzle'];
+            pages.forEach(p => {
+                const section = document.getElementById('page-' + p);
+                const button = document.getElementById('tab-' + p);
+                if (p === tabId) {
+                    section.classList.remove('hidden');
+                    if (button) button.classList.add('active');
+                } else {
+                    section.classList.add('hidden');
+                    if (button) button.classList.remove('active');
+                }
+            });
+
+            if (tabId === 'p159') {
+                drawPinBase();
+            } else if (tabId === 'p160') {
+                drawPartsDiagram('center');
+            } else if (tabId === 'p161') {
+                startCompassAnimation();
+            } else if (tabId === 'p162') {
+                initDesignStudio();
+            } else if (tabId === 'puzzle') {
+                resetPuzzleBoard();
+            }
+        }
+
+        // Toggle Answer Visibility
+        function toggleAnswer(ansId) {
+            const el = document.getElementById(ansId);
+            if (el) {
+                el.classList.toggle('hidden');
+            }
+        }
+
+        // PAGE 159 Pin & Pencil Simulation
+        const pinCanvas = document.getElementById('pinCanvas');
+        const pCtx = pinCanvas.getContext('2d');
+
+        function drawPinBase() {
+            pCtx.clearRect(0, 0, pinCanvas.width, pinCanvas.height);
+            const cx = pinCanvas.width / 2, cy = pinCanvas.height / 2, r = 90;
+
+            pCtx.beginPath();
+            pCtx.arc(cx, cy, 6, 0, Math.PI * 2);
+            pCtx.fillStyle = '#f43f5e';
+            pCtx.fill();
+            pCtx.strokeStyle = '#9f1239';
+            pCtx.stroke();
+
+            pCtx.font = '14px Hind Siliguri';
+            pCtx.fillStyle = '#475569';
+            pCtx.fillText('পিন (কেন্দ্র)', cx - 30, cy + 25);
+        }
+
+        function animatePinDrawing() {
+            drawPinBase();
+            const cx = pinCanvas.width / 2, cy = pinCanvas.height / 2, r = 90;
+            let angle = 0;
+
+            function animate() {
+                pCtx.clearRect(0, 0, pinCanvas.width, pinCanvas.height);
+
+                pCtx.beginPath();
+                pCtx.arc(cx, cy, 6, 0, Math.PI * 2);
+                pCtx.fillStyle = '#f43f5e';
+                pCtx.fill();
+
+                pCtx.beginPath();
+                pCtx.arc(cx, cy, r, 0, angle);
+                pCtx.lineWidth = 3;
+                pCtx.strokeStyle = '#2563eb';
+                pCtx.stroke();
+
+                const px = cx + r * Math.cos(angle);
+                const py = cy + r * Math.sin(angle);
+
+                pCtx.beginPath();
+                pCtx.moveTo(cx, cy);
+                pCtx.lineTo(px, py);
+                pCtx.lineWidth = 2;
+                pCtx.strokeStyle = '#94a3b8';
+                pCtx.stroke();
+
+                pCtx.beginPath();
+                pCtx.arc(px, py, 5, 0, Math.PI * 2);
+                pCtx.fillStyle = '#0f172a';
+                pCtx.fill();
+
+                if (angle < Math.PI * 2) {
+                    angle += 0.08;
+                    requestAnimationFrame(animate);
+                } else {
+                    speakText('একটি সুন্দর বৃত্ত তৈরি হয়ে গেল!');
+                }
+            }
+            animate();
+        }
+
+        // PAGE 160 Diagram
+        const partsCanvas = document.getElementById('partsCanvas');
+        const partsCtx = partsCanvas.getContext('2d');
+
+        function drawPartsDiagram(part) {
+            const cx = partsCanvas.width / 2, cy = partsCanvas.height / 2, r = 100;
+            partsCtx.clearRect(0, 0, partsCanvas.width, partsCanvas.height);
+
+            const titleEl = document.getElementById('part-title');
+
+            partsCtx.beginPath();
+            partsCtx.arc(cx, cy, r, 0, Math.PI * 2);
+            partsCtx.lineWidth = (part === 'circumference') ? 6 : 3;
+            partsCtx.strokeStyle = (part === 'circumference') ? '#e11d48' : '#64748b';
+            partsCtx.stroke();
+
+            if (part === 'circumference') {
+                titleEl.textContent = "চিহ্নিত অংশ: পরিধি (লাল সীমানা)";
+                titleEl.className = "mt-3 font-bold text-lg text-rose-600 text-center";
+            }
+
+            if(part === 'chord') {
+                const angle1 = Math.PI * 0.75; 
+                const angle2 = Math.PI * 1.8;  
+
+                const x1 = cx + r * Math.cos(angle1);
+                const y1 = cy + r * Math.sin(angle1);
+                const x2 = cx + r * Math.cos(angle2);
+                const y2 = cy + r * Math.sin(angle2);
+
+                partsCtx.beginPath();
+                partsCtx.moveTo(x1, y1);
+                partsCtx.lineTo(x2, y2);
+                partsCtx.lineWidth = 5;
+                partsCtx.strokeStyle = '#d97706';
+                partsCtx.stroke();
+
+                partsCtx.beginPath();
+                partsCtx.arc(x1, y1, 5, 0, Math.PI * 2);
+                partsCtx.arc(x2, y2, 5, 0, Math.PI * 2);
+                partsCtx.fillStyle = '#b45309';
+                partsCtx.fill();
+
+                titleEl.textContent = "চিহ্নিত অংশ: জ্যা (কমলা রেখা)";
+                titleEl.className = "mt-3 font-bold text-lg text-amber-600 text-center";
+            }
+
+            if(part === 'diameter') {
+                partsCtx.beginPath();
+                partsCtx.moveTo(cx - r, cy);
+                partsCtx.lineTo(cx + r, cy);
+                partsCtx.lineWidth = 5;
+                partsCtx.strokeStyle = '#7c3aed';
+                partsCtx.stroke();
+
+                partsCtx.beginPath();
+                partsCtx.arc(cx - r, cy, 5, 0, Math.PI * 2);
+                partsCtx.arc(cx + r, cy, 5, 0, Math.PI * 2);
+                partsCtx.fillStyle = '#6d28d9';
+                partsCtx.fill();
+
+                titleEl.textContent = "চিহ্নিত অংশ: ব্যাস (বেগুনি রেখা)";
+                titleEl.className = "mt-3 font-bold text-lg text-purple-600 text-center";
+            }
+
+            if(part === 'radius') {
+                const angle = -Math.PI / 4;
+                const rx = cx + r * Math.cos(angle);
+                const ry = cy + r * Math.sin(angle);
+
+                partsCtx.beginPath();
+                partsCtx.moveTo(cx, cy);
+                partsCtx.lineTo(rx, ry);
+                partsCtx.lineWidth = 5;
+                partsCtx.strokeStyle = '#059669';
+                partsCtx.stroke();
+
+                partsCtx.beginPath();
+                partsCtx.arc(rx, ry, 5, 0, Math.PI * 2);
+                partsCtx.fillStyle = '#047857';
+                partsCtx.fill();
+
+                titleEl.textContent = "চিহ্নিত অংশ: ব্যাসার্ধ (সবুজ রেখা)";
+                titleEl.className = "mt-3 font-bold text-lg text-emerald-600 text-center";
+            }
+
+            partsCtx.beginPath();
+            partsCtx.arc(cx, cy, (part === 'center') ? 8 : 5, 0, Math.PI * 2);
+            partsCtx.fillStyle = (part === 'center') ? '#2563eb' : '#0f172a';
+            partsCtx.fill();
+
+            if (part === 'center') {
+                titleEl.textContent = "চিহ্নিত অংশ: কেন্দ্র (নীল বিন্দু)";
+                titleEl.className = "mt-3 font-bold text-lg text-blue-600 text-center";
+            }
+        }
+
+        function highlightPart(part) {
+            drawPartsDiagram(part);
+        }
+
+        // PAGE 161 Compass
+        const compassCanvas = document.getElementById('compassCanvas');
+        const cctx = compassCanvas.getContext('2d');
+        let selectedRadiusCm = 3;
+
+        function setCompassRadius(r) {
+            selectedRadiusCm = r;
+            startCompassAnimation();
+        }
+
+        function startCompassAnimation() {
+            cctx.clearRect(0, 0, compassCanvas.width, compassCanvas.height);
+            const cx = compassCanvas.width / 2, cy = compassCanvas.height / 2;
+            const rPx = selectedRadiusCm * 25;
+            let angle = 0;
+
+            function animate() {
+                cctx.clearRect(0, 0, compassCanvas.width, compassCanvas.height);
+
+                cctx.beginPath();
+                cctx.arc(cx, cy, 4, 0, Math.PI * 2);
+                cctx.fillStyle = '#dc2626';
+                cctx.fill();
+
+                cctx.beginPath();
+                cctx.arc(cx, cy, rPx, 0, angle);
+                cctx.lineWidth = 3;
+                cctx.strokeStyle = '#2563eb';
+                cctx.stroke();
+
+                const ax = cx + rPx * Math.cos(angle);
+                const ay = cy + rPx * Math.sin(angle);
+
+                cctx.beginPath();
+                cctx.moveTo(cx, cy);
+                cctx.lineTo(ax, ay);
+                cctx.lineWidth = 2;
+                cctx.strokeStyle = '#64748b';
+                cctx.stroke();
+
+                if (angle < Math.PI * 2) {
+                    angle += 0.08;
+                    requestAnimationFrame(animate);
+                } else {
+                    cctx.font = '14px Hind Siliguri';
+                    cctx.fillStyle = '#059669';
+                    cctx.fillText(`ব্যাসার্ধ = ${selectedRadiusCm} সেমি`, cx + 10, cy - 10);
+                }
+            }
+            animate();
+        }
+
+        // PAGE 162 WIDE DESIGN STUDIO & COMPLETE DRAWING TOOLS
+        const dCanvas = document.getElementById('designCanvas');
+        const dctx = dCanvas.getContext('2d');
+
+        let activeTool = 'pencil';
+        let strokeColor = '#38bdf8';
+        let brushSize = 3;
+        let zoomLevel = 1;
+
+        let customDiameterCm = 8;
+        let customRadiusCm = 4;
+
+        function adjustDiameter(delta) {
+            let newVal = customDiameterCm + delta;
+            if (newVal < 2) newVal = 2;
+            if (newVal > 30) newVal = 30;
+            onDiameterInputChange(newVal);
+        }
+
+        function onDiameterInputChange(val) {
+            customDiameterCm = Math.max(2, Math.min(30, parseFloat(val) || 2));
+            customRadiusCm = customDiameterCm / 2;
+            document.getElementById('diameter-input').value = customDiameterCm;
+            document.getElementById('radius-calc-display').textContent = customRadiusCm;
+        }
+
+        let isDrawing = false;
+        let startX = 0, startY = 0;
+        let undoStack = [];
+
+        function setTool(tool) {
+            activeTool = tool;
+            ['pencil', 'line', 'circle', 'eraser'].forEach(t => {
+                const btn = document.getElementById('tool-' + t);
+                if (btn) {
+                    if (t === tool) {
+                        btn.className = "px-3 py-1.5 rounded-lg text-sm font-bold bg-blue-600 text-white flex items-center gap-1 transition";
+                    } else {
+                        btn.className = "px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-slate-600 flex items-center gap-1 transition text-slate-300";
+                    }
+                }
+            });
+        }
+
+        function setColor(color) {
+            strokeColor = color;
+            if(activeTool === 'eraser') setTool('pencil');
+        }
+
+        function updateBrushSize(val) {
+            brushSize = val;
+            document.getElementById('brush-size-val').textContent = val + 'px';
+        }
+
+        function saveState() {
+            if (undoStack.length >= 10) undoStack.shift();
+            undoStack.push(dctx.getImageData(0, 0, dCanvas.width, dCanvas.height));
+        }
+
+        function undoDraw() {
+            if (undoStack.length > 0) {
+                const previousState = undoStack.pop();
+                dctx.putImageData(previousState, 0, 0);
+            }
+        }
+
+        function clearDesignCanvas() {
+            saveState();
+            dctx.clearRect(0, 0, dCanvas.width, dCanvas.height);
+            dctx.fillStyle = '#0f172a';
+            dctx.fillRect(0, 0, dCanvas.width, dCanvas.height);
+        }
+
+        function initDesignStudio() {
+            if (undoStack.length === 0) {
+                clearDesignCanvas();
+                undoStack = [];
+            }
+        }
+
+        function changeZoom(delta) {
+            zoomLevel = Math.max(0.5, Math.min(2.0, zoomLevel + delta));
+            updateZoomTransform();
+        }
+
+        function resetZoom() {
+            zoomLevel = 1;
+            updateZoomTransform();
+        }
+
+        function updateZoomTransform() {
+            const container = document.getElementById('zoomable-container');
+            if (container) {
+                container.style.transform = `scale(${zoomLevel})`;
+                document.getElementById('zoom-level-display').textContent = `${Math.round(zoomLevel * 100)}%`;
+            }
+        }
+
+        function getCanvasCoords(e) {
+            const rect = dCanvas.getBoundingClientRect();
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+
+            return {
+                x: (clientX - rect.left) * (dCanvas.width / rect.width),
+                y: (clientY - rect.top) * (dCanvas.height / rect.height)
+            };
+        }
+
+        let tempSnapshot = null;
+
+        function startDrawing(e) {
+            isDrawing = true;
+            saveState();
+            const pos = getCanvasCoords(e);
+            startX = pos.x;
+            startY = pos.y;
+
+            tempSnapshot = dctx.getImageData(0, 0, dCanvas.width, dCanvas.height);
+
+            if (activeTool === 'pencil' || activeTool === 'eraser') {
+                dctx.beginPath();
+                dctx.moveTo(startX, startY);
+            } else if (activeTool === 'circle') {
+                const radiusPx = customRadiusCm * 20; 
+                animateCompassDrawing(startX, startY, radiusPx);
+            }
+        }
+
+        function animateCompassDrawing(cx, cy, radius) {
+            isDrawing = false; 
+            let step = 1; 
+            let currentRadiusPx = 0;
+            let angle = 0;
+
+            const speedElem = document.getElementById('anim-speed-select');
+            const animSpeed = speedElem ? parseFloat(speedElem.value) : 0.08;
+
+            function animate() {
+                dctx.putImageData(tempSnapshot, 0, 0);
+
+                if (step === 1) {
+                    drawCompassVisual(cx, cy, 0, 0);
+                    dctx.font = '14px Hind Siliguri, sans-serif';
+                    dctx.fillStyle = '#ef4444';
+                    dctx.fillText('ধাপ ১: কেন্দ্র স্থান নির্ধারণ', cx - 55, cy - radius - 30);
+
+                    step = 2;
+                    setTimeout(() => { requestAnimationFrame(animate); }, 300);
+                    return;
+                }
+
+                if (step === 2) {
+                    currentRadiusPx += (radius - currentRadiusPx) * 0.2;
+                    drawCompassVisual(cx, cy, currentRadiusPx, 0);
+
+                    dctx.save();
+                    dctx.setLineDash([3, 3]);
+                    dctx.beginPath();
+                    dctx.moveTo(cx, cy);
+                    dctx.lineTo(cx + currentRadiusPx, cy);
+                    dctx.strokeStyle = '#38bdf8';
+                    dctx.stroke();
+                    dctx.restore();
+
+                    dctx.font = '14px Hind Siliguri, sans-serif';
+                    dctx.fillStyle = '#38bdf8';
+                    dctx.fillText(`ধাপ ২: কম্পাস ছড়ানো (ব্যাসার্ধ = ${customRadiusCm} সেমি)`, cx - 80, cy - radius - 30);
+
+                    if (Math.abs(radius - currentRadiusPx) < 0.8) {
+                        currentRadiusPx = radius;
+                        step = 3;
+                        setTimeout(() => { requestAnimationFrame(animate); }, 250);
+                    } else {
+                        requestAnimationFrame(animate);
+                    }
+                    return;
+                }
+
+                if (step === 3) {
+                    dctx.beginPath();
+                    dctx.arc(cx, cy, radius, 0, angle);
+                    dctx.lineWidth = brushSize;
+                    dctx.strokeStyle = strokeColor;
+                    dctx.stroke();
+
+                    drawCompassVisual(cx, cy, radius, angle);
+
+                    dctx.font = '14px Hind Siliguri, sans-serif';
+                    dctx.fillStyle = '#22c55e';
+                    dctx.fillText('ধাপ ৩: ঘুরিয়ে বৃত্ত আঁকা...', cx - 50, cy - radius - 30);
+
+                    if (angle < Math.PI * 2) {
+                        angle += animSpeed;
+                        requestAnimationFrame(animate);
+                    } else {
+                        dctx.putImageData(tempSnapshot, 0, 0);
+                        
+                        dctx.beginPath();
+                        dctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                        dctx.lineWidth = brushSize;
+                        dctx.strokeStyle = strokeColor;
+                        dctx.stroke();
+
+                        dctx.beginPath();
+                        dctx.arc(cx, cy, 4, 0, Math.PI * 2);
+                        dctx.fillStyle = '#ef4444';
+                        dctx.fill();
+
+                        const showMeasure = document.getElementById('show-measurements-check')?.checked;
+                        if (showMeasure) {
+                            dctx.save();
+                            dctx.setLineDash([4, 4]);
+                            dctx.beginPath();
+                            dctx.moveTo(cx - radius, cy);
+                            dctx.lineTo(cx + radius, cy);
+                            dctx.lineWidth = 2;
+                            dctx.strokeStyle = '#f59e0b';
+                            dctx.stroke();
+                            dctx.restore();
+
+                            const circumferenceCm = (2 * Math.PI * customRadiusCm).toFixed(1);
+                            dctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                            dctx.fillRect(cx - 75, cy + 15, 150, 60);
+                            dctx.strokeStyle = '#38bdf8';
+                            dctx.lineWidth = 1;
+                            dctx.strokeRect(cx - 75, cy + 15, 150, 60);
+
+                            dctx.font = '12px Hind Siliguri, sans-serif';
+                            dctx.fillStyle = '#a855f7';
+                            dctx.fillText(`ব্যাস (d): ${customDiameterCm} সেমি`, cx - 65, cy + 32);
+                            dctx.fillStyle = '#38bdf8';
+                            dctx.fillText(`ব্যাসার্ধ (r): ${customRadiusCm} সেমি`, cx - 65, cy + 48);
+                            dctx.fillStyle = '#f43f5e';
+                            dctx.fillText(`পরিধি: ${circumferenceCm} সেমি`, cx - 65, cy + 64);
+                        }
+
+                        speakText(`একটি সুন্দর ${customDiameterCm} সেন্টিমিটার ব্যাসের বৃত্ত অঙ্কন সম্পন্ন হলো!`);
+                    }
+                }
+            }
+            animate();
+        }
+
+        function drawCompassVisual(cx, cy, radius, currentAngle) {
+            const pencilX = cx + radius * Math.cos(currentAngle);
+            const pencilY = cy + radius * Math.sin(currentAngle);
+
+            dctx.beginPath();
+            dctx.arc(cx, cy, 6, 0, Math.PI * 2);
+            dctx.fillStyle = '#ef4444';
+            dctx.fill();
+            dctx.strokeStyle = '#ffffff';
+            dctx.lineWidth = 2;
+            dctx.stroke();
+
+            const hingeY = cy - Math.max(40, radius * 0.8);
+            const hingeX = cx;
+
+            dctx.beginPath();
+            dctx.moveTo(cx, cy);
+            dctx.lineTo(hingeX, hingeY);
+            dctx.lineTo(pencilX, pencilY);
+            dctx.lineWidth = 4;
+            dctx.strokeStyle = '#cbd5e1';
+            dctx.stroke();
+
+            dctx.beginPath();
+            dctx.arc(hingeX, hingeY, 8, 0, Math.PI * 2);
+            dctx.fillStyle = '#3b82f6';
+            dctx.fill();
+
+            dctx.beginPath();
+            dctx.arc(pencilX, pencilY, brushSize + 3, 0, Math.PI * 2);
+            dctx.fillStyle = strokeColor;
+            dctx.fill();
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getCanvasCoords(e);
+
+            dctx.lineWidth = activeTool === 'eraser' ? brushSize * 4 : brushSize;
+            dctx.lineCap = 'round';
+            dctx.lineJoin = 'round';
+            dctx.strokeStyle = activeTool === 'eraser' ? '#0f172a' : strokeColor;
+
+            if (activeTool === 'pencil' || activeTool === 'eraser') {
+                dctx.lineTo(pos.x, pos.y);
+                dctx.stroke();
+            } else if (activeTool === 'line') {
+                dctx.putImageData(tempSnapshot, 0, 0);
+                dctx.beginPath();
+                dctx.moveTo(startX, startY);
+                dctx.lineTo(pos.x, pos.y);
+                dctx.stroke();
+            }
+        }
+
+        function stopDrawing(e) {
+            if (isDrawing) {
+                isDrawing = false;
+                dctx.beginPath();
+            }
+        }
+
+        dCanvas.addEventListener('mousedown', startDrawing);
+        dCanvas.addEventListener('mousemove', draw);
+        dCanvas.addEventListener('mouseup', stopDrawing);
+        dCanvas.addEventListener('mouseleave', stopDrawing);
+
+        dCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); }, { passive: false });
+        dCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
+        dCanvas.addEventListener('touchend', stopDrawing);
+
+        function generatePattern(type) {
+            clearDesignCanvas();
+            const cx = dCanvas.width / 2;
+            const cy = dCanvas.height / 2;
+            const colors = ['#f43f5e', '#a855f7', '#3b82f6', '#10b981', '#f59e0b', '#ec4899'];
+
+            if (type === 'flower') {
+                const r = 70;
+                for (let i = 0; i < 6; i++) {
+                    const a = (i * Math.PI) / 3;
+                    const x = cx + r * Math.cos(a);
+                    const y = cy + r * Math.sin(a);
+
+                    dctx.beginPath();
+                    dctx.arc(x, y, r, 0, Math.PI * 2);
+                    dctx.lineWidth = 2.5;
+                    dctx.strokeStyle = colors[i];
+                    dctx.stroke();
+                }
+                dctx.beginPath();
+                dctx.arc(cx, cy, r, 0, Math.PI * 2);
+                dctx.strokeStyle = '#ffffff';
+                dctx.stroke();
+
+            } else if (type === 'concentric') {
+                for (let r = 25; r <= 180; r += 20) {
+                    dctx.beginPath();
+                    dctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    dctx.lineWidth = 2;
+                    dctx.strokeStyle = colors[(r / 20) % colors.length];
+                    dctx.stroke();
+                }
+            } else if (type === 'rangoli') {
+                for (let i = 0; i < 12; i++) {
+                    const a = (i * Math.PI) / 6;
+                    const x = cx + 60 * Math.cos(a);
+                    const y = cy + 60 * Math.sin(a);
+
+                    dctx.beginPath();
+                    dctx.arc(x, y, 90, 0, Math.PI * 2);
+                    dctx.lineWidth = 1.8;
+                    dctx.strokeStyle = colors[i % colors.length];
+                    dctx.stroke();
+                }
+            }
+        }
+
+        // PUZZLE SYSTEM IMPLEMENTATION
+        const puzzleCanvas = document.getElementById('puzzleCanvas');
+        const pzCtx = puzzleCanvas ? puzzleCanvas.getContext('2d') : null;
+
+        let placedPuzzleParts = {
+            center: false,
+            circumference: false,
+            radius: false,
+            diameter: false,
+            chord: false
+        };
+
+        function resetPuzzleBoard() {
+            placedPuzzleParts = { center: false, circumference: false, radius: false, diameter: false, chord: false };
+            renderPuzzleCanvas();
+            const txt = document.getElementById('puzzle-status-text');
+            if (txt) txt.textContent = "অংশগুলো টেনে এনে একটি সম্পূর্ণ বৃত্ত তৈরি করো!";
+        }
+
+        function handlePuzzleDragStart(e, partType) {
+            e.dataTransfer.setData('partType', partType);
+            speakAndHighlightPart(partType);
+        }
+
+        function handlePuzzleDrop(e) {
+            e.preventDefault();
+            const partType = e.dataTransfer.getData('partType');
+            if (partType && placedPuzzleParts.hasOwnProperty(partType)) {
+                placedPuzzleParts[partType] = true;
+                renderPuzzleCanvas();
+                speakAndHighlightPart(partType, true);
+            }
+        }
+
+        function speakAndHighlightPart(partType, isDropped = false) {
+            const names = {
+                center: 'কেন্দ্র বিন্দু',
+                circumference: 'পরিধি',
+                radius: 'ব্যাসার্ধ',
+                diameter: 'ব্যাস',
+                chord: 'জ্যা'
+            };
+            const name = names[partType] || 'অংশ';
+            if (isDropped) {
+                speakText(`${name} সঠিকভাবে বৃত্তের সাথে যুক্ত হয়েছে!`);
+            } else {
+                speakText(name);
+            }
+        }
+
+        function renderPuzzleCanvas() {
+            if (!pzCtx) return;
+            pzCtx.clearRect(0, 0, puzzleCanvas.width, puzzleCanvas.height);
+
+            const cx = puzzleCanvas.width / 2;
+            const cy = puzzleCanvas.height / 2;
+            const r = 110;
+
+            pzCtx.save();
+            pzCtx.beginPath();
+            pzCtx.arc(cx, cy, r, 0, Math.PI * 2);
+            pzCtx.setLineDash([6, 6]);
+            pzCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            pzCtx.lineWidth = 2;
+            pzCtx.stroke();
+            pzCtx.restore();
+
+            if (placedPuzzleParts.circumference) {
+                pzCtx.beginPath();
+                pzCtx.arc(cx, cy, r, 0, Math.PI * 2);
+                pzCtx.lineWidth = 5;
+                pzCtx.strokeStyle = '#f43f5e';
+                pzCtx.stroke();
+            }
+
+            if (placedPuzzleParts.diameter) {
+                pzCtx.beginPath();
+                pzCtx.moveTo(cx - r, cy);
+                pzCtx.lineTo(cx + r, cy);
+                pzCtx.lineWidth = 4;
+                pzCtx.strokeStyle = '#f59e0b';
+                pzCtx.stroke();
+            }
+
+            if (placedPuzzleParts.radius) {
+                pzCtx.beginPath();
+                pzCtx.moveTo(cx, cy);
+                pzCtx.lineTo(cx + r * Math.cos(-Math.PI / 3), cy + r * Math.sin(-Math.PI / 3));
+                pzCtx.lineWidth = 4;
+                pzCtx.strokeStyle = '#10b981';
+                pzCtx.stroke();
+            }
+
+            if (placedPuzzleParts.chord) {
+                const x1 = cx + r * Math.cos(Math.PI * 0.7);
+                const y1 = cy + r * Math.sin(Math.PI * 0.7);
+                const x2 = cx + r * Math.cos(Math.PI * 1.25);
+                const y2 = cy + r * Math.sin(Math.PI * 1.25);
+
+                pzCtx.beginPath();
+                pzCtx.moveTo(x1, y1);
+                pzCtx.lineTo(x2, y2);
+                pzCtx.lineWidth = 4;
+                pzCtx.strokeStyle = '#14b8a6';
+                pzNavigator = pzCtx.stroke();
+            }
+
+            if (placedPuzzleParts.center) {
+                pzCtx.beginPath();
+                pzCtx.arc(cx, cy, 7, 0, Math.PI * 2);
+                pzCtx.fillStyle = '#3b82f6';
+                pzCtx.fill();
+                pzCtx.strokeStyle = '#ffffff';
+                pzCtx.lineWidth = 2;
+                pzCtx.stroke();
+            }
+
+            if (placedPuzzleParts.circumference && placedPuzzleParts.center) {
+                const txt = document.getElementById('puzzle-status-text');
+                if (txt) {
+                    txt.textContent = "🎉 অসাধারণ! তুমি একটি সম্পূর্ণ বৃত্ত তৈরি করে ফেলেছ!";
+                }
+            }
+        }
+
+        window.onload = function() {
+            switchTab('p159');
+        };
+    </script>
+</body>
+</html>
